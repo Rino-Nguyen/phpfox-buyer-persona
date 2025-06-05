@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chân Dung Khách Hàng - phpFox</title>
+    <title>Phân Tích Chi Tiết | [Tên Dự Án/Sản Phẩm Của Bạn]</title>
     <!-- Tải Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Sử dụng font Inter -->
@@ -11,193 +11,249 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6; /* Màu nền xám nhạt */
+            background-color: #f9fafb; /* Màu nền xám rất nhạt */
         }
-        .persona-card {
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        .section-card {
+            background-color: white;
+            border-radius: 0.75rem; /* 12px */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem; /* mb-8 */
+            overflow: hidden;
         }
-        .persona-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1), 0 6px 6px rgba(0,0,0,0.1);
-        }
-        .tag {
-            background-color: #e0e7ff; /* Indigo-100 */
-            color: #4338ca; /* Indigo-700 */
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px; /* pill shape */
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-         .section-title {
-            font-size: 1.125rem; /* text-lg */
+        .section-header {
+            background-color: #4f46e5; /* Indigo-600 */
+            color: white;
+            padding: 1rem 1.5rem; /* py-4 px-6 */
+            font-size: 1.5rem; /* text-2xl */
             font-weight: 700; /* font-bold */
-            color: #4f46e5; /* Indigo-600 */
-            margin-bottom: 0.5rem; /* mb-2 */
-            border-bottom: 2px solid #c7d2fe; /* Indigo-200 */
-            padding-bottom: 0.25rem; /* pb-1 */
         }
-        .list-disc li {
-            margin-bottom: 0.25rem;
+        .question-item {
+            border-bottom: 1px solid #e5e7eb; /* gray-200 */
+            padding: 1.5rem; /* p-6 */
+        }
+        .question-item:last-child {
+            border-bottom: none;
+        }
+        .question-title {
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 600; /* font-semibold */
+            color: #1f2937; /* gray-800 */
+            margin-bottom: 0.75rem; /* mb-3 */
+        }
+        .detail-grid {
+            display: grid;
+            gap: 1rem; /* gap-4 */
+        }
+        /* Cho màn hình lớn hơn, chia thành nhiều cột hơn nếu cần */
+        @media (min-width: 768px) {
+            .detail-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+        }
+        .detail-block strong {
+            color: #374151; /* gray-700 */
+            display: block;
+            margin-bottom: 0.25rem; /* mb-1 */
+            font-weight: 600;
+        }
+        .detail-block p, .detail-block ul {
+            color: #4b5563; /* gray-600 */
+            font-size: 0.875rem; /* text-sm */
+            line-height: 1.6;
+        }
+        .detail-block ul {
+            list-style-type: disc;
+            padding-left: 1.25rem; /* pl-5 */
         }
     </style>
 </head>
 <body class="p-4 md:p-8">
 
     <header class="mb-10 text-center">
-        <h1 class="text-4xl font-bold text-indigo-700">Chân Dung Khách Hàng Mục Tiêu</h1>
-        <p class="text-lg text-gray-600 mt-2">Thấu hiểu khách hàng để xây dựng sản phẩm phpFox tốt hơn.</p>
+        <h1 class="text-4xl font-extrabold text-indigo-700 tracking-tight">
+            Bảng Phân Tích Chi Tiết: [Tên Dự Án/Sản Phẩm Của Bạn]
+        </h1>
+        <p class="text-lg text-gray-600 mt-2">
+            Tổng hợp các yếu tố quan trọng và câu hỏi cần giải đáp.
+        </p>
     </header>
 
-    <div class="container mx-auto">
-        <!-- Grid chứa các thẻ Persona -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+    <div class="container mx-auto max-w-6xl">
 
-            <!-- Mẫu Thẻ Persona 1 -->
-            <article class="persona-card bg-white rounded-xl shadow-lg overflow-hidden">
-                <div class="p-6">
-                    <div class="flex items-center space-x-4 mb-5">
-                        <img class="h-20 w-20 rounded-full object-cover shadow-md" 
-                             src="https://placehold.co/100x100/A5B4FC/3730A3?text=Anh+DD" 
-                             alt="[Ảnh đại diện của Tên Persona]">
-                        <div>
-                            <h2 class="text-2xl font-bold text-gray-800">[Tên Persona 1]</h2>
-                            <p class="text-sm text-indigo-600 font-medium">[Vai trò/Chức danh chính]</p>
+        <!-- Mục WHO -->
+        <section id="who" class="section-card">
+            <h2 class="section-header">WHO (Đối tượng là ai?)</h2>
+            <div class="divide-y divide-gray-200">
+                <!-- Câu hỏi 1 trong WHO -->
+                <div class="question-item">
+                    <h3 class="question-title">1. [Điền nội dung câu hỏi 1 từ cột "Questions" trong mục WHO]</h3>
+                    <div class="detail-grid">
+                        <div class="detail-block">
+                            <strong>[Tên cột 3 - VD: phpFox Platform]:</strong>
+                            <p>[Điền nội dung tương ứng từ cột 3 cho câu hỏi 1]</p>
+                        </div>
+                        <div class="detail-block">
+                            <strong>[Tên cột 4 - VD: Report]:</strong>
+                            <p>[Điền nội dung tương ứng từ cột 4 cho câu hỏi 1]</p>
+                        </div>
+                        <div class="detail-block">
+                            <strong>[Tên cột 5 - VD: Persona & User Needs]:</strong>
+                            <p>[Điền nội dung tương ứng từ cột 5 cho câu hỏi 1]</p>
                         </div>
                     </div>
-
-                    <div class="mb-5">
-                        <h3 class="section-title">Thông Tin Chung</h3>
-                        <ul class="text-gray-700 text-sm space-y-1">
-                            <li><strong>Tuổi:</strong> [Điền tuổi]</li>
-                            <li><strong>Nghề nghiệp:</strong> [Điền nghề nghiệp]</li>
-                            <li><strong>Học vấn:</strong> [Điền học vấn]</li>
-                            <li><strong>Địa điểm:</strong> [Điền địa điểm]</li>
-                            <li><strong>Sở thích:</strong> <span class="tag">[Sở thích 1]</span> <span class="tag">[Sở thích 2]</span></li>
-                        </ul>
-                    </div>
-
-                    <div class="mb-5">
-                        <h3 class="section-title">Mục Tiêu (Goals)</h3>
-                        <ul class="list-disc list-inside text-gray-700 text-sm pl-1">
-                            <li>[Mục tiêu 1 của Persona]</li>
-                            <li>[Mục tiêu 2 của Persona]</li>
-                            <li>[Mục tiêu 3 của Persona]</li>
-                        </ul>
-                    </div>
-
-                    <div class="mb-5">
-                        <h3 class="section-title">Thách Thức (Challenges)</h3>
-                        <ul class="list-disc list-inside text-gray-700 text-sm pl-1">
-                            <li>[Thách thức 1 của Persona]</li>
-                            <li>[Thách thức 2 của Persona]</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="mb-5">
-                        <h3 class="section-title">phpFox có thể giúp gì?</h3>
-                        <p class="text-gray-700 text-sm leading-relaxed">
-                            [Mô tả cách phpFox giải quyết thách thức và giúp Persona đạt mục tiêu. Ví dụ: phpFox cung cấp nền tảng mạnh mẽ để xây dựng cộng đồng trực tuyến, giúp [Tên Persona] kết nối với người dùng và quản lý nội dung hiệu quả.]
-                        </p>
-                    </div>
-
-                    <div class="mb-5">
-                        <h3 class="section-title">Trích Dẫn Tiêu Biểu</h3>
-                        <blockquote class="italic text-gray-600 text-sm border-l-4 border-indigo-300 pl-4 py-2 bg-indigo-50 rounded-r-md">
-                            "[Điền một câu trích dẫn thể hiện suy nghĩ hoặc nhu cầu của Persona]"
-                        </blockquote>
-                    </div>
-
-                    <div>
-                        <h3 class="section-title">Kênh Thông Tin Ưa Thích</h3>
-                         <div class="flex flex-wrap gap-2">
-                            <span class="tag">[Kênh 1]</span>
-                            <span class="tag">[Kênh 2]</span>
-                            <span class="tag">[Blog chuyên ngành]</span>
-                         </div>
-                    </div>
                 </div>
-            </article>
-
-            <!-- Mẫu Thẻ Persona 2 (Bạn có thể sao chép và sửa đổi thẻ này cho các persona khác) -->
-            <article class="persona-card bg-white rounded-xl shadow-lg overflow-hidden">
-                <div class="p-6">
-                    <div class="flex items-center space-x-4 mb-5">
-                        <img class="h-20 w-20 rounded-full object-cover shadow-md" 
-                             src="https://placehold.co/100x100/C7D2FE/4338CA?text=Anh+DD" 
-                             alt="[Ảnh đại diện của Tên Persona 2]">
-                        <div>
-                            <h2 class="text-2xl font-bold text-gray-800">[Tên Persona 2]</h2>
-                            <p class="text-sm text-indigo-600 font-medium">[Quản lý Dự án Cộng đồng]</p>
+                <!-- Câu hỏi 2 trong WHO -->
+                <div class="question-item">
+                    <h3 class="question-title">2. [Điền nội dung câu hỏi 2 từ cột "Questions" trong mục WHO]</h3>
+                    <div class="detail-grid">
+                        <div class="detail-block">
+                            <strong>[Tên cột 3]:</strong>
+                            <p>[Điền nội dung tương ứng từ cột 3 cho câu hỏi 2]</p>
+                        </div>
+                        <div class="detail-block">
+                            <strong>[Tên cột 4]:</strong>
+                            <p>[Điền nội dung tương ứng từ cột 4 cho câu hỏi 2]</p>
+                        </div>
+                         <div class="detail-block">
+                            <strong>[Tên cột 5]:</strong>
+                            <p>[Điền nội dung tương ứng từ cột 5 cho câu hỏi 2]</p>
                         </div>
                     </div>
-                     <div class="mb-5">
-                        <h3 class="section-title">Thông Tin Chung</h3>
-                        <ul class="text-gray-700 text-sm space-y-1">
-                            <li><strong>Tuổi:</strong> 35</li>
-                            <li><strong>Nghề nghiệp:</strong> Quản lý dự án</li>
-                            <li><strong>Học vấn:</strong> Thạc sĩ CNTT</li>
-                            <li><strong>Địa điểm:</strong> Hà Nội</li>
-                            <li><strong>Sở thích:</strong> <span class="tag">Công nghệ mới</span> <span class="tag">Đọc sách</span> <span class="tag">Du lịch</span></li>
-                        </ul>
-                    </div>
-                    <div class="mb-5">
-                        <h3 class="section-title">Mục Tiêu (Goals)</h3>
-                        <ul class="list-disc list-inside text-gray-700 text-sm pl-1">
-                            <li>Xây dựng một cộng đồng trực tuyến sôi nổi và gắn kết.</li>
-                            <li>Tăng tương tác người dùng trên nền tảng.</li>
-                            <li>Dễ dàng quản lý và kiểm duyệt nội dung.</li>
-                        </ul>
-                    </div>
-                    <div class="mb-5">
-                        <h3 class="section-title">Thách Thức (Challenges)</h3>
-                        <ul class="list-disc list-inside text-gray-700 text-sm pl-1">
-                            <li>Thiếu công cụ tùy chỉnh mạnh mẽ để phù hợp với nhu cầu riêng.</li>
-                            <li>Khó khăn trong việc tích hợp các tính năng mong muốn.</li>
-                            <li>Lo ngại về vấn đề bảo mật và mở rộng trong tương lai.</li>
-                        </ul>
-                    </div>
-                    <div class="mb-5">
-                        <h3 class="section-title">phpFox có thể giúp gì?</h3>
-                        <p class="text-gray-700 text-sm leading-relaxed">
-                           phpFox cung cấp một giải pháp linh hoạt với nhiều ứng dụng và khả năng tùy biến cao, giúp [Tên Persona 2] tạo ra một diễn đàn/mạng xã hội độc đáo, quản lý thành viên hiệu quả và mở rộng tính năng khi cần.
-                        </p>
-                    </div>
-                     <div class="mb-5">
-                        <h3 class="section-title">Trích Dẫn Tiêu Biểu</h3>
-                        <blockquote class="italic text-gray-600 text-sm border-l-4 border-indigo-300 pl-4 py-2 bg-indigo-50 rounded-r-md">
-                            "Tôi cần một nền tảng ổn định, dễ sử dụng nhưng cũng phải đủ mạnh để phát triển cộng đồng của mình."
-                        </blockquote>
-                    </div>
-                     <div>
-                        <h3 class="section-title">Kênh Thông Tin Ưa Thích</h3>
-                         <div class="flex flex-wrap gap-2">
-                            <span class="tag">Diễn đàn công nghệ</span>
-                            <span class="tag">LinkedIn</span>
-                            <span class="tag">Trang tin tức chuyên ngành</span>
-                         </div>
-                    </div>
                 </div>
-            </article>
-            
-            <!-- Thêm các thẻ persona khác ở đây -->
-            <!-- Ví dụ thẻ trống để bạn tự điền -->
-            <article class="persona-card bg-white rounded-xl shadow-lg overflow-hidden">
-                <div class="p-6 border-2 border-dashed border-gray-300 rounded-xl text-center h-full flex flex-col justify-center items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3m0 0v3m0-3h3m-3 0H9" />
-                    </svg>
-                    <h3 class="text-xl font-semibold text-gray-600">Thêm Persona Mới</h3>
-                    <p class="text-gray-500 text-sm mt-1">Sao chép một thẻ mẫu và điền thông tin.</p>
-                </div>
-            </article>
+                <!-- Thêm các câu hỏi khác cho mục WHO tại đây -->
+            </div>
+        </section>
 
-        </div>
+        <!-- Mục WHAT -->
+        <section id="what" class="section-card">
+            <h2 class="section-header">WHAT (Vấn đề/Sản phẩm là gì?)</h2>
+            <div class="divide-y divide-gray-200">
+                <div class="question-item">
+                    <h3 class="question-title">1. [Điền nội dung câu hỏi 1 từ cột "Questions" trong mục WHAT]</h3>
+                    <div class="detail-grid">
+                        <div class="detail-block">
+                            <strong>[Tên cột 3]:</strong>
+                            <p>[Điền nội dung tương ứng]</p>
+                        </div>
+                        <div class="detail-block">
+                            <strong>[Tên cột 4]:</strong>
+                            <p>[Điền nội dung tương ứng]</p>
+                        </div>
+                        <div class="detail-block">
+                            <strong>[Tên cột 5]:</strong>
+                            <p>[Điền nội dung tương ứng]</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Thêm các câu hỏi khác cho mục WHAT tại đây -->
+            </div>
+        </section>
+
+        <!-- Mục WHY -->
+        <section id="why" class="section-card">
+            <h2 class="section-header">WHY (Tại sao lại quan trọng/cần thiết?)</h2>
+            <div class="divide-y divide-gray-200">
+                 <div class="question-item">
+                    <h3 class="question-title">1. [Điền nội dung câu hỏi 1 từ cột "Questions" trong mục WHY]</h3>
+                    <div class="detail-grid">
+                        <div class="detail-block">
+                            <strong>[Tên cột 3]:</strong>
+                            <p>[Điền nội dung tương ứng]</p>
+                        </div>
+                        <div class="detail-block">
+                            <strong>[Tên cột 4]:</strong>
+                            <p>[Điền nội dung tương ứng]</p>
+                        </div>
+                        <div class="detail-block">
+                            <strong>[Tên cột 5]:</strong>
+                            <p>[Điền nội dung tương ứng]</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Thêm các câu hỏi khác cho mục WHY tại đây -->
+            </div>
+        </section>
+
+        <!-- Mục WHERE -->
+        <section id="where" class="section-card">
+            <h2 class="section-header">WHERE (Bối cảnh/Địa điểm ở đâu?)</h2>
+            <div class="divide-y divide-gray-200">
+                 <div class="question-item">
+                    <h3 class="question-title">1. [Điền nội dung câu hỏi 1 từ cột "Questions" trong mục WHERE]</h3>
+                    <div class="detail-grid">
+                        <div class="detail-block">
+                            <strong>[Tên cột 3]:</strong>
+                            <p>[Điền nội dung tương ứng]</p>
+                        </div>
+                        <div class="detail-block">
+                            <strong>[Tên cột 4]:</strong>
+                            <p>[Điền nội dung tương ứng]</p>
+                        </div>
+                        <div class="detail-block">
+                            <strong>[Tên cột 5]:</strong>
+                            <p>[Điền nội dung tương ứng]</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Thêm các câu hỏi khác cho mục WHERE tại đây -->
+            </div>
+        </section>
+
+        <!-- Mục WHEN -->
+        <section id="when" class="section-card">
+            <h2 class="section-header">WHEN (Thời điểm nào?)</h2>
+            <div class="divide-y divide-gray-200">
+                <div class="question-item">
+                    <h3 class="question-title">1. [Điền nội dung câu hỏi 1 từ cột "Questions" trong mục WHEN]</h3>
+                    <div class="detail-grid">
+                        <div class="detail-block">
+                            <strong>[Tên cột 3]:</strong>
+                            <p>[Điền nội dung tương ứng]</p>
+                        </div>
+                        <div class="detail-block">
+                            <strong>[Tên cột 4]:</strong>
+                            <p>[Điền nội dung tương ứng]</p>
+                        </div>
+                        <div class="detail-block">
+                            <strong>[Tên cột 5]:</strong>
+                            <p>[Điền nội dung tương ứng]</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Thêm các câu hỏi khác cho mục WHEN tại đây -->
+            </div>
+        </section>
+
+        <!-- Mục HOW & HOW MUCH -->
+        <section id="how" class="section-card">
+            <h2 class="section-header">HOW & HOW MUCH (Như thế nào & Bao nhiêu?)</h2>
+            <div class="divide-y divide-gray-200">
+                 <div class="question-item">
+                    <h3 class="question-title">1. [Điền nội dung câu hỏi 1 từ cột "Questions" trong mục HOW/HOW MUCH]</h3>
+                    <div class="detail-grid">
+                        <div class="detail-block">
+                            <strong>[Tên cột 3]:</strong>
+                            <p>[Điền nội dung tương ứng]</p>
+                        </div>
+                        <div class="detail-block">
+                            <strong>[Tên cột 4]:</strong>
+                            <p>[Điền nội dung tương ứng]</p>
+                        </div>
+                        <div class="detail-block">
+                            <strong>[Tên cột 5]:</strong>
+                            <p>[Điền nội dung tương ứng]</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Thêm các câu hỏi khác cho mục HOW/HOW MUCH tại đây -->
+            </div>
+        </section>
+
     </div>
 
-    <footer class="mt-12 text-center text-sm text-gray-500">
-        <p>&copy; <span id="currentYear"></span> [Tên Công Ty Của Bạn]. Bảo lưu mọi quyền.</p>
-        <p>Mẫu giao diện Chân Dung Khách Hàng.</p>
+    <footer class="mt-12 py-8 text-center text-sm text-gray-500 border-t border-gray-200">
+        <p>&copy; <span id="currentYear"></span> [Tên Công Ty/Tổ Chức Của Bạn]. Bảo lưu mọi quyền.</p>
+        <p>Tài liệu được tạo dựa trên hình ảnh phân tích.</p>
     </footer>
 
     <script>
