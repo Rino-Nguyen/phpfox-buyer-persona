@@ -2,17 +2,17 @@
 <!-- Chosen Palette: Warm Neutrals (Slate, Zinc, Teal Accent) -->
 <!-- Application Structure Plan: A single-page dashboard with a fixed sidebar navigation based on the WHO, WHAT, WHY, WHERE, WHEN, HOW categories. This structure provides a clear, non-linear exploration path, allowing users to jump to specific aspects of the buyer persona. Each section will use a card-based layout or lists to present detailed Q&A content from the source report, ensuring readability and adherence to "không bớt chữ, không thêm chữ". A small chart is used for gender distribution for quick understanding. -->
 <!-- Visualization & Content Choices: 
-- KPI Cards (Tổng quan): Goal: Inform. Method: Styled HTML/CSS. Justification: Provides a quick summary.
+- KPI Cards (Overview): Goal: Inform. Method: Styled HTML/CSS. Justification: Provides a quick summary.
 - Gender Distribution (WHO): Goal: Inform proportions. Method: Chart.js Doughnut chart. Justification: Visually represents male/female split.
 - Other sections: Use HTML/CSS cards, lists, and bolding to present detailed Q&A pairs from the report. Justification: Maintains original text while enhancing readability.
 - Navigation: Fixed sidebar and mobile menu.
 - Library/Method: Chart.js for the gender chart (Canvas). All other layouts and interactive elements use HTML/CSS with Tailwind. -->
 <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-<html lang="vi" class="scroll-smooth">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Báo Cáo Chân Dung Khách Hàng phpFox</title>
+    <title>phpFox Customer Persona Report</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -106,16 +106,16 @@
         <nav id="sidebar" class="w-64 bg-white shadow-lg fixed h-full hidden lg:block overflow-y-auto">
             <div class="p-6">
                 <h2 class="text-xl font-bold text-teal-700">phpFox Buyer Persona</h2>
-                <p class="text-sm text-slate-500">Báo Cáo Chân Dung Khách Hàng</p>
+                <p class="text-sm text-slate-500">Customer Persona Report</p>
             </div>
             <ul class="mt-6 space-y-1">
-                <li><a href="#tong-quan" class="nav-link block py-3 px-6 text-slate-700">Tổng Quan</a></li>
-                <li><a href="#who" class="nav-link block py-3 px-6 text-slate-700">WHO (Ai là khách hàng)</a></li>
-                <li><a href="#what" class="nav-link block py-3 px-6 text-slate-700">WHAT (Sản phẩm & Nhu cầu)</a></li>
-                <li><a href="#why" class="nav-link block py-3 px-6 text-slate-700">WHY (Lý do cần sản phẩm)</a></li>
-                <li><a href="#where" class="nav-link block py-3 px-6 text-slate-700">WHERE (Nơi mua sắm & Tìm kiếm)</a></li>
-                <li><a href="#when" class="nav-link block py-3 px-6 text-slate-700">WHEN (Thời điểm mua hàng)</a></li>
-                <li><a href="#how" class="nav-link block py-3 px-6 text-slate-700">HOW (Cách thức & Giá cả)</a></li>
+                <li><a href="#overview" class="nav-link block py-3 px-6 text-slate-700">Overview</a></li>
+                <li><a href="#who" class="nav-link block py-3 px-6 text-slate-700">WHO (Who is the customer)</a></li>
+                <li><a href="#what" class="nav-link block py-3 px-6 text-slate-700">WHAT (Product & Needs)</a></li>
+                <li><a href="#why" class="nav-link block py-3 px-6 text-slate-700">WHY (Reasons for needing product)</a></li>
+                <li><a href="#where" class="nav-link block py-3 px-6 text-slate-700">WHERE (Where they buy & research)</a></li>
+                <li><a href="#when" class="nav-link block py-3 px-6 text-slate-700">WHEN (When they buy)</a></li>
+                <li><a href="#how" class="nav-link block py-3 px-6 text-slate-700">HOW (How & How much)</a></li>
             </ul>
         </nav>
 
@@ -132,79 +132,79 @@
             <!-- Mobile Menu -->
             <div id="mobile-menu" class="hidden lg:hidden mb-6 bg-white rounded-lg shadow">
                  <ul class="space-y-1 p-2">
-                    <li><a href="#tong-quan" class="nav-link block py-2 px-4 text-slate-700 rounded-md">Tổng Quan</a></li>
-                    <li><a href="#who" class="nav-link block py-2 px-4 text-slate-700 rounded-md">WHO (Ai là khách hàng)</a></li>
-                    <li><a href="#what" class="nav-link block py-2 px-4 text-slate-700 rounded-md">WHAT (Sản phẩm & Nhu cầu)</a></li>
-                    <li><a href="#why" class="nav-link block py-2 px-4 text-slate-700 rounded-md">WHY (Lý do cần sản phẩm)</a></li>
-                    <li><a href="#where" class="nav-link block py-2 px-4 text-slate-700 rounded-md">WHERE (Nơi mua sắm & Tìm kiếm)</a></li>
-                    <li><a href="#when" class="nav-link block py-2 px-4 text-slate-700 rounded-md">WHEN (Thời điểm mua hàng)</a></li>
-                    <li><a href="#how" class="nav-link block py-2 px-4 text-slate-700 rounded-md">HOW (Cách thức & Giá cả)</a></li>
+                    <li><a href="#overview" class="nav-link block py-2 px-4 text-slate-700 rounded-md">Overview</a></li>
+                    <li><a href="#who" class="nav-link block py-2 px-4 text-slate-700 rounded-md">WHO (Who is the customer)</a></li>
+                    <li><a href="#what" class="nav-link block py-2 px-4 text-slate-700 rounded-md">WHAT (Product & Needs)</a></li>
+                    <li><a href="#why" class="nav-link block py-2 px-4 text-slate-700 rounded-md">WHY (Reasons for needing product)</a></li>
+                    <li><a href="#where" class="nav-link block py-2 px-4 text-slate-700 rounded-md">WHERE (Where they buy & research)</a></li>
+                    <li><a href="#when" class="nav-link block py-2 px-4 text-slate-700 rounded-md">WHEN (When they buy)</a></li>
+                    <li><a href="#how" class="nav-link block py-2 px-4 text-slate-700 rounded-md">HOW (How & How much)</a></li>
                 </ul>
             </div>
 
-            <!-- Section: Tổng Quan -->
-            <section id="tong-quan" class="section-card mb-12">
-                <h2 class="section-title">Tổng Quan về Chân Dung Khách Hàng phpFox</h2>
-                <p class="section-intro">Báo cáo này cung cấp cái nhìn tổng quan chi tiết về chân dung khách hàng mục tiêu của phpFox, từ đặc điểm nhân khẩu học, nhu cầu, động lực, đến hành vi tìm kiếm và mua hàng. Hiểu rõ khách hàng sẽ giúp chúng ta phát triển chiến lược marketing và sản phẩm hiệu quả.</p>
+            <!-- Section: Overview -->
+            <section id="overview" class="section-card mb-12">
+                <h2 class="section-title">Overview of phpFox Customer Persona</h2>
+                <p class="section-intro">This report provides a detailed overview of the phpFox target customer persona, from demographics, needs, motivations, to search and purchase behavior. Understanding customers thoroughly will help us develop effective marketing and product strategies.</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div class="bg-teal-50 p-4 rounded-lg border border-teal-200">
-                        <p class="font-semibold text-teal-700">Đối tượng chính</p>
+                        <p class="font-semibold text-teal-700">Primary Target</p>
                         <p class="text-xl font-bold text-teal-600">Founder/CEO</p>
                     </div>
                     <div class="bg-teal-50 p-4 rounded-lg border border-teal-200">
-                        <p class="font-semibold text-teal-700">Giá trị sản phẩm</p>
-                        <p class="text-xl font-bold text-teal-600">300.000đ/sản phẩm</p>
+                        <p class="font-semibold text-teal-700">Product Value</p>
+                        <p class="text-xl font-bold text-teal-600">300.000đ/product</p>
                     </div>
                     <div class="bg-teal-50 p-4 rounded-lg border border-teal-200">
-                        <p class="font-semibold text-teal-700">Ngân sách mua 1 lần</p>
-                        <p class="text-xl font-bold text-teal-600">Dưới 1 triệu</p>
+                        <p class="font-semibold text-teal-700">Single Purchase Budget</p>
+                        <p class="text-xl font-bold text-teal-600">Under 1 million</p>
                     </div>
                 </div>
             </section>
 
             <!-- Section: WHO -->
             <section id="who" class="section-card mb-12">
-                <h2 class="section-title">WHO (Ai là khách hàng)</h2>
-                <p class="section-intro">Phần này mô tả đặc điểm nhân khẩu học, nghề nghiệp và vai trò của người mua và người ảnh hưởng đến quyết định mua phpFox.</p>
+                <h2 class="section-title">WHO (Who is the customer)</h2>
+                <p class="section-intro">This section describes the demographics, occupations, and roles of phpFox buyers and influencers.</p>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                     <div class="question-card">
-                        <p class="question-text">1. Giới tính</p>
-                        <p class="answer-text">Tất cả các giới tính (80% Nam, 20% Nữ)</p>
+                        <p class="question-text">1. Gender</p>
+                        <p class="answer-text">All genders (80% Male, 20% Female)</p>
                         <div class="chart-container mt-4">
                             <canvas id="genderChart"></canvas>
                         </div>
                     </div>
                     <div class="question-card">
-                        <p class="question-text">2. Độ tuổi</p>
+                        <p class="question-text">2. Age</p>
                         <p class="answer-text">25-55</p>
                         <div class="horizontal-line"></div>
-                        <p class="question-text">3. Nghề nghiệp</p>
+                        <p class="question-text">3. Occupation</p>
                         <ul class="answer-text list-disc list-inside">
-                            <li>Founders hoặc chủ doanh nghiệp xây dựng một cộng đồng với một đội ngũ nhỏ.</li>
-                            <li>Online Coaches (Huấn luyện viên trực tuyến)</li>
-                            <li>Membership Site Creators (Người tạo trang thành viên)</li>
-                            <li>Niche community builder (Người xây dựng cộng đồng chuyên biệt)</li>
+                            <li>Founders or business owner building a community with a small team behind.</li>
+                            <li>Online Coaches</li>
+                            <li>Membership Site Creators</li>
+                            <li>Niche community builder</li>
                         </ul>
-                        <p class="action-text">→ *Hành động:* Phát triển nội dung quảng cáo phù hợp và nhắm mục tiêu quảng cáo thích hợp.</p>
+                        <p class="action-text">→ *Action:* Develop relevant ad content and suitable ads targeting.</p>
                     </div>
                 </div>
 
                 <div class="question-card">
-                    <p class="question-text">4. Chức danh/Vai trò?</p>
+                    <p class="question-text">4. Title/Role?</p>
                     <p class="answer-text">CEO, Founder, Community Manager, Head of Product, Marketing Manager</p>
-                    <p class="action-text">→ *Hành động:* Phát triển nội dung quảng cáo phù hợp và nhắm mục tiêu quảng cáo thích hợp.</p>
+                    <p class="action-text">→ *Action:* Develop relevant ad content and suitable ads targeting.</p>
                     <div class="horizontal-line"></div>
-                    <p class="question-text">8. Học vấn</p>
+                    <p class="question-text">8. Education</p>
                     <p class="answer-text">College-educated (often business, marketing, or tech)</p>
-                    <p class="action-text">→ *Hành động:* Nội dung nên sâu sắc, không thô tục.</p>
+                    <p class="action-text">→ *Action:* The content should be insightful, not be vulgar.</p>
                 </div>
 
                 <div class="question-card">
-                    <p class="question-text">9. Ai là người ra quyết định mua hàng?</p>
+                    <p class="question-text">9. Who makes the purchase?</p>
                     <p class="answer-text">Founder / CEO (makes final decision and payment)</p>
                     <div class="horizontal-line"></div>
-                    <p class="question-text">10. Ai là người ảnh hưởng trực tiếp đến quyết định mua hàng?</p>
+                    <p class="question-text">10. Who Directly Influences the Purchase Decision?</p>
                     <ul class="answer-text list-disc list-inside">
                         <li>Product/Tech lead or Marketing Manager (who evaluates usability, features)</li>
                         <li>Trusted team members, online peer groups, or fellow community creators</li>
@@ -212,14 +212,14 @@
                 </div>
 
                 <div class="question-card">
-                    <p class="question-text">11. Ai là người ảnh hưởng gián tiếp đến quyết định mua hàng?</p>
+                    <p class="question-text">11. Who Indirectly Influences the Purchase Decision?</p>
                     <ul class="answer-text list-disc list-inside">
                         <li>Social proof from similar brands</li>
                         <li>tech influencers / reviewers</li>
                     </ul>
-                    <p class="action-text">→ *Hành động:* Collab witg KOLs who are Tech blogger or Youtuber to promote phpFox product</p>
+                    <p class="action-text">→ *Action:* Collab with KOLs who are Tech blogger or Youtuber to promote phpFox product</p>
                     <div class="horizontal-line"></div>
-                    <p class="question-text">12. Ai thực sự sử dụng sản phẩm?</p>
+                    <p class="question-text">12. Who actually uses the product?</p>
                     <ul class="answer-text list-disc list-inside">
                         <li>Community managers / admin</li>
                         <li>Community Members</li>
@@ -230,8 +230,8 @@
 
             <!-- Section: WHAT -->
             <section id="what" class="section-card mb-12">
-                <h2 class="section-title">WHAT (Sản phẩm và nhu cầu)</h2>
-                <p class="section-intro">Phần này đi sâu vào những khó khăn, động lực và kỳ vọng của khách hàng đối với một nền tảng cộng đồng như phpFox.</p>
+                <h2 class="section-title">WHAT (Product and Needs)</h2>
+                <p class="section-intro">This section delves into customer pain points, motivations, and expectations for a community platform like phpFox.</p>
                 
                 <div class="question-card">
                     <p class="question-text">13. what is their painpoints</p>
@@ -244,7 +244,7 @@
                         <li>The platform is free, so they can't guarantee security. (This is critical for businesses.)</li>
                         <li>Under Third-party branding, not their own branding.</li>
                     </ul>
-                    <p class="action-text">→ *Hành động:* Create relevant blog</p>
+                    <p class="action-text">→ *Action:* Create relevant blog</p>
                 </div>
 
                 <div class="question-card">
@@ -289,7 +289,7 @@
                         <li>2. Need to onboard team members and guide them to use phpFox</li>
                         <li>3. Initial installation and set up</li>
                     </ul>
-                    <p class="action-text">→ *Hành động:* Provide Active Product Support; Provide comprehensive video tutorial, documents, user manuals</p>
+                    <p class="action-text">→ *Action:* Provide Active Product Support; Provide comprehensive video tutorial, documents, user manuals</p>
                     <div class="horizontal-line"></div>
                     <p class="question-text">15. what hold them back or make them hesitate buying phpFox?</p>
                     <ul class="answer-text list-disc list-inside">
@@ -316,7 +316,7 @@
                         <li>Easy mobile access</li>
                         <li>Clear documentation and responsive support</li>
                     </ul>
-                    <p class="action-text">→ *Hành động:* Create relevant content</p>
+                    <p class="action-text">→ *Action:* Create relevant content</p>
                 </div>
 
                 <div class="question-card">
@@ -327,14 +327,14 @@
 
             <!-- Section: WHY -->
             <section id="why" class="section-card mb-12">
-                <h2 class="section-title">WHY (Lý do cần sản phẩm)</h2>
-                <p class="section-intro">Phần này trình bày chuỗi lý do từ nhu cầu cơ bản đến tầm nhìn dài hạn, giải thích tại sao khách hàng cần phpFox.</p>
+                <h2 class="section-title">WHY (Reasons for needing product)</h2>
+                <p class="section-intro">This section presents the chain of reasons from basic needs to long-term vision, explaining why customers need phpFox.</p>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="question-card">
                         <p class="question-text">19. Why 01: Why do they need phpFox? -> Reason 01</p>
                         <p class="answer-text">→ To build a fully customizable, white-label community platform. Because phpFox resolve their painpoints</p>
-                        <p class="action-text">→ *Hành động:* Create relevant content</p>
+                        <p class="action-text">→ *Action:* Create relevant content</p>
                     </div>
                     <div class="question-card">
                         <p class="question-text">20. Why 02: Why phpFox solve that? -> lý do 02</p>
@@ -355,8 +355,8 @@
 
             <!-- Section: WHERE -->
             <section id="where" class="section-card mb-12">
-                <h2 class="section-title">WHERE (Nơi mua sắm và tìm kiếm)</h2>
-                <p class="section-intro">Phần này khám phá các kênh mà khách hàng tìm kiếm thông tin, tương tác và thực hiện giao dịch mua phpFox.</p>
+                <h2 class="section-title">WHERE (Where they buy and research)</h2>
+                <p class="section-intro">This section explores the channels where customers seek information, interact, and make purchases for phpFox.</p>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="question-card">
@@ -375,7 +375,7 @@
                     <div class="question-card">
                         <p class="question-text">26. Where do they live?</p>
                         <p class="answer-text">US, Canada, Australia, Europe,</p>
-                        <p class="action-text">→ *Hành động:* Develop relevant ad content and suitable ads targeting.</p>
+                        <p class="action-text">→ *Action:* Develop relevant ad content and suitable ads targeting.</p>
                         <div class="horizontal-line"></div>
                         <p class="question-text">27. Where do thay Engage with Similar Community Creators?</p>
                         <ul class="answer-text list-disc list-inside">
@@ -383,7 +383,7 @@
                             <li>LinkedIn communities and comment threads</li>
                             <li>Twitter/X spaces and threads with hashtag #buildinpublic, #communityled, #nocode</li>
                         </ul>
-                        <p class="action-text">→ *Hành động:* Develop relevant ad content and suitable ads targeting.</p>
+                        <p class="action-text">→ *Action:* Develop relevant ad content and suitable ads targeting.</p>
                     </div>
                 </div>
 
@@ -399,7 +399,7 @@
                         <li>Case studies or customer testimonials</li>
                         <li>Ads via Google/Facebook</li>
                     </ul>
-                    <p class="action-text">→ *Hành động:* Develop relevant content on every touch points</p>
+                    <p class="action-text">→ *Action:* Develop relevant content on every touch points</p>
                 </div>
 
                 <div class="question-card">
@@ -409,18 +409,18 @@
                         <li>phpFox documentation (user mannual)</li>
                         <li>phpFox ticket support (WHMS)</li>
                     </ul>
-                    <p class="action-text">→ *Hành động:* Provide active support</p>
+                    <p class="action-text">→ *Action:* Provide active support</p>
                     <div class="horizontal-line"></div>
                     <p class="question-text">31. where do they read software review?</p>
                     <p class="answer-text">g2, captera, trustpilot</p>
-                    <p class="action-text">→ *Hành động:* update phpFox company profile in these review sites</p>
+                    <p class="action-text">→ *Action:* update phpFox company profile in these review sites</p>
                 </div>
             </section>
 
             <!-- Section: WHEN -->
             <section id="when" class="section-card mb-12">
-                <h2 class="section-title">WHEN (Thời điểm mua hàng)</h2>
-                <p class="section-intro">Phần này xác định các yếu tố kích hoạt và thời điểm quyết định mua hàng của khách hàng phpFox.</p>
+                <h2 class="section-title">WHEN (When they buy)</h2>
+                <p class="section-intro">This section identifies the triggers and timing of phpFox customer purchasing decisions.</p>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="question-card">
@@ -431,7 +431,7 @@
                             <li>When investing in business infrastructure (new fiscal year, team expansion)</li>
                             <li>After frustrations with existing tools (lack of customization, privacy, monetization)</li>
                         </ul>
-                        <p class="action-text">→ *Hành động:* Develop relevant content</p>
+                        <p class="action-text">→ *Action:* Develop relevant content</p>
                     </div>
                     <div class="question-card">
                         <p class="question-text">33. when they're ready to buy?</p>
@@ -446,14 +446,14 @@
                 <div class="question-card">
                     <p class="question-text">34. When do they usually make purchases?</p>
                     <p class="answer-text">in Q4 when the holiday season happens</p>
-                    <p class="action-text">→ *Hành động:* Send marketing email during peak shopping time. Increase ad spend for big promotion in q4. Staff customer service: Ensure enough support is available when customers are shopping and might have questions.</p>
+                    <p class="action-text">→ *Action:* Send marketing email during peak shopping time. Increase ad spend for big promotion in q4. Staff customer service: Ensure enough support is available when customers are shopping and might have questions.</p>
                     <div class="horizontal-line"></div>
                     <p class="question-text">35. Actively Search for Alternatives?</p>
                     <ul class="answer-text list-disc list-inside">
                         <li>After facing limitations with current tools (lack of customization, privacy, monetization)</li>
                         <li>When setting strategic goals (e.g. “build our own space”)</li>
                     </ul>
-                    <p class="action-text">→ *Hành động:* Làm nội dung phù hợp</p>
+                    <p class="action-text">→ *Action:* Create relevant content</p>
                 </div>
 
                 <div class="question-card">
@@ -468,8 +468,8 @@
 
             <!-- Section: HOW & How Many / How Much -->
             <section id="how" class="section-card mb-12">
-                <h2 class="section-title">HOW & How Many / How Much (Cách thức và số lượng/giá cả)</h2>
-                <p class="section-intro">Phần này đi vào chi tiết cách thức khách hàng mua sản phẩm, số lượng và ngân sách họ sẵn sàng chi trả.</p>
+                <h2 class="section-title">HOW & How Many / How Much (Method and Quantity/Price)</h2>
+                <p class="section-intro">This section details how customers purchase the product, the quantities, and the budget they are willing to spend.</p>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="question-card">
@@ -484,27 +484,27 @@
                             <li>- 1 license + 1 single app</li>
                             <li>- 1 license + Installation Service</li>
                         </ul>
-                        <p class="action-text">→ *Hành động:* Design combo 2 - 4 sản phẩm</p>
+                        <p class="action-text">→ *Action:* Design combo 2 - 4 products</p>
                     </div>
                     <div class="question-card">
-                        <p class="question-text">40. Khách hàng sẵn sàng mua với giá bao nhiêu, sẵn sàng trả bao nhiêu cho 1 sản phẩm.</p>
+                        <p class="question-text">40. How much are customers willing to pay for 1 product?</p>
                         <p class="answer-text">300.000đ</p>
-                        <p class="action-text">→ *Hành động:* Thiết sản phẩm với mức giá phù hợp</p>
+                        <p class="action-text">→ *Action:* Design product with suitable pricing</p>
                         <div class="horizontal-line"></div>
-                        <p class="question-text">41. Khách hàng sẵn sàng trả bao nhiêu cho 1 lần mua hàng.</p>
-                        <p class="answer-text">dưới 1 triệu</p>
-                        <p class="action-text">→ *Hành động:* Thiết kế kịch bản bán hàng với khả năng up sale, cross phù hợp. Thiết kế combo với mức giá phù hợp</p>
+                        <p class="question-text">41. How much are customers willing to pay for 1 purchase?</p>
+                        <p class="answer-text">under 1 million</p>
+                        <p class="action-text">→ *Action:* Design sales script with suitable up-sale, cross-sale capabilities. Design combo with suitable pricing</p>
                     </div>
                 </div>
 
                 <div class="question-card">
                     <p class="question-text">42. How do they pay?</p>
                     <p class="answer-text">paypal, credit card, bank transfer</p>
-                    <p class="action-text">→ *Hành động:* Có đủ các kênh thanh toán phù hợp, sử dụng tài khoản của những ngân hàng thông dụng nhất</p>
+                    <p class="action-text">→ *Action:* Ensure all suitable payment channels are available, use accounts from the most common banks</p>
                     <div class="horizontal-line"></div>
                     <p class="question-text">43. How many times in product lifetime cycle?</p>
                     <p class="answer-text">They might stick for 3–5+ years if platform scales with them and generate revenue</p>
-                    <p class="action-text">→ *Hành động:* Dựa vào giá trị vòng đời khách hàng, tính ra chi phí sẵn sàng bỏ ra để kiếm được một khách hàng mới.</p>
+                    <p class="action-text">→ *Action:* Based on customer lifetime value, calculate the willing cost to acquire a new customer.</p>
                 </div>
             </section>
 
@@ -515,7 +515,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Data for Gender Chart
     const genderData = {
-        labels: ['Nam', 'Nữ'],
+        labels: ['Male', 'Female'],
         datasets: [{
             data: [80, 20],
             backgroundColor: ['#0d9488', '#ec4899'], // Teal for Male, Pink for Female
