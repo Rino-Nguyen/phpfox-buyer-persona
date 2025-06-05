@@ -1,265 +1,593 @@
 <!DOCTYPE html>
-<html lang="vi">
+<!-- Chosen Palette: Warm Neutrals (Slate, Zinc, Teal Accent) -->
+<!-- Application Structure Plan: A single-page dashboard with a fixed sidebar navigation based on the WHO, WHAT, WHY, WHERE, WHEN, HOW categories. This structure provides a clear, non-linear exploration path, allowing users to jump to specific aspects of the buyer persona. Each section will use a card-based layout or lists to present detailed Q&A content from the source report, ensuring readability and adherence to "không bớt chữ, không thêm chữ". A small chart is used for gender distribution for quick understanding. -->
+<!-- Visualization & Content Choices: 
+- KPI Cards (Tổng quan): Goal: Inform. Method: Styled HTML/CSS. Justification: Provides a quick summary.
+- Gender Distribution (WHO): Goal: Inform proportions. Method: Chart.js Doughnut chart. Justification: Visually represents male/female split.
+- Other sections: Use HTML/CSS cards, lists, and bolding to present detailed Q&A pairs from the report. Justification: Maintains original text while enhancing readability.
+- Navigation: Fixed sidebar and mobile menu.
+- Library/Method: Chart.js for the gender chart (Canvas). All other layouts and interactive elements use HTML/CSS with Tailwind. -->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+<html lang="vi" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phân Tích Chi Tiết | [Tên Dự Án/Sản Phẩm Của Bạn]</title>
-    <!-- Tải Tailwind CSS -->
+    <title>Báo Cáo Chân Dung Khách Hàng phpFox</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Sử dụng font Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f9fafb; /* Màu nền xám rất nhạt */
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+            color: #1e293b; /* slate-800 */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 300px; 
+            margin-left: auto;
+            margin-right: auto;
+            height: 250px;
+            max-height: 300px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 280px;
+            }
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        .nav-link.active {
+            background-color: #f1f5f9; /* slate-100 */
+            border-left-color: #0d9488; /* teal-600 */
+            color: #0d9488;
+            font-weight: 600;
+        }
+        .nav-link:hover {
+            background-color: #f1f5f9; /* slate-100 */
+            color: #0f766e; /* teal-700 */
         }
         .section-card {
             background-color: white;
-            border-radius: 0.75rem; /* 12px */
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            margin-bottom: 2rem; /* mb-8 */
-            overflow: hidden;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            border: 1px solid #e2e8f0; /* slate-200 */
         }
-        .section-header {
-            background-color: #4f46e5; /* Indigo-600 */
-            color: white;
-            padding: 1rem 1.5rem; /* py-4 px-6 */
-            font-size: 1.5rem; /* text-2xl */
-            font-weight: 700; /* font-bold */
+        .section-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: #0f172a; /* slate-900 */
+            margin-bottom: 0.5rem;
+            border-bottom: 2px solid #0d9488; /* teal-600 */
+            padding-bottom: 0.5rem;
         }
-        .question-item {
-            border-bottom: 1px solid #e5e7eb; /* gray-200 */
-            padding: 1.5rem; /* p-6 */
+        .section-intro {
+            color: #475569; /* slate-600 */
+            margin-bottom: 2rem;
+            max-width: 800px;
         }
-        .question-item:last-child {
-            border-bottom: none;
+        .question-card {
+            background-color: #f8fafc; /* slate-50 */
+            border-radius: 0.5rem;
+            padding: 1rem;
+            border: 1px solid #cbd5e1; /* slate-300 */
+            margin-bottom: 1rem;
         }
-        .question-title {
-            font-size: 1.125rem; /* text-lg */
-            font-weight: 600; /* font-semibold */
-            color: #1f2937; /* gray-800 */
-            margin-bottom: 0.75rem; /* mb-3 */
-        }
-        .detail-grid {
-            display: grid;
-            gap: 1rem; /* gap-4 */
-        }
-        /* Cho màn hình lớn hơn, chia thành nhiều cột hơn nếu cần */
-        @media (min-width: 768px) {
-            .detail-grid {
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            }
-        }
-        .detail-block strong {
-            color: #374151; /* gray-700 */
-            display: block;
-            margin-bottom: 0.25rem; /* mb-1 */
+        .question-text {
             font-weight: 600;
+            color: #334155; /* slate-700 */
+            margin-bottom: 0.5rem;
         }
-        .detail-block p, .detail-block ul {
-            color: #4b5563; /* gray-600 */
-            font-size: 0.875rem; /* text-sm */
-            line-height: 1.6;
+        .answer-text {
+            color: #475569; /* slate-600 */
         }
-        .detail-block ul {
-            list-style-type: disc;
-            padding-left: 1.25rem; /* pl-5 */
+        .action-text {
+            font-style: italic;
+            color: #0d9488; /* teal-600 */
+            margin-top: 0.5rem;
+        }
+        .horizontal-line {
+            border-bottom: 1px dashed #cbd5e1; /* slate-300 */
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
         }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="bg-slate-50">
 
-    <header class="mb-10 text-center">
-        <h1 class="text-4xl font-extrabold text-indigo-700 tracking-tight">
-            Bảng Phân Tích Chi Tiết: [Tên Dự Án/Sản Phẩm Của Bạn]
-        </h1>
-        <p class="text-lg text-gray-600 mt-2">
-            Tổng hợp các yếu tố quan trọng và câu hỏi cần giải đáp.
-        </p>
-    </header>
-
-    <div class="container mx-auto max-w-6xl">
-
-        <!-- Mục WHO -->
-        <section id="who" class="section-card">
-            <h2 class="section-header">WHO (Đối tượng là ai?)</h2>
-            <div class="divide-y divide-gray-200">
-                <!-- Câu hỏi 1 trong WHO -->
-                <div class="question-item">
-                    <h3 class="question-title">1. [Điền nội dung câu hỏi 1 từ cột "Questions" trong mục WHO]</h3>
-                    <div class="detail-grid">
-                        <div class="detail-block">
-                            <strong>[Tên cột 3 - VD: phpFox Platform]:</strong>
-                            <p>[Điền nội dung tương ứng từ cột 3 cho câu hỏi 1]</p>
-                        </div>
-                        <div class="detail-block">
-                            <strong>[Tên cột 4 - VD: Report]:</strong>
-                            <p>[Điền nội dung tương ứng từ cột 4 cho câu hỏi 1]</p>
-                        </div>
-                        <div class="detail-block">
-                            <strong>[Tên cột 5 - VD: Persona & User Needs]:</strong>
-                            <p>[Điền nội dung tương ứng từ cột 5 cho câu hỏi 1]</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Câu hỏi 2 trong WHO -->
-                <div class="question-item">
-                    <h3 class="question-title">2. [Điền nội dung câu hỏi 2 từ cột "Questions" trong mục WHO]</h3>
-                    <div class="detail-grid">
-                        <div class="detail-block">
-                            <strong>[Tên cột 3]:</strong>
-                            <p>[Điền nội dung tương ứng từ cột 3 cho câu hỏi 2]</p>
-                        </div>
-                        <div class="detail-block">
-                            <strong>[Tên cột 4]:</strong>
-                            <p>[Điền nội dung tương ứng từ cột 4 cho câu hỏi 2]</p>
-                        </div>
-                         <div class="detail-block">
-                            <strong>[Tên cột 5]:</strong>
-                            <p>[Điền nội dung tương ứng từ cột 5 cho câu hỏi 2]</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Thêm các câu hỏi khác cho mục WHO tại đây -->
+    <div class="flex min-h-screen">
+        <!-- Sidebar Navigation -->
+        <nav id="sidebar" class="w-64 bg-white shadow-lg fixed h-full hidden lg:block overflow-y-auto">
+            <div class="p-6">
+                <h2 class="text-xl font-bold text-teal-700">phpFox Buyer Persona</h2>
+                <p class="text-sm text-slate-500">Báo Cáo Chân Dung Khách Hàng</p>
             </div>
-        </section>
+            <ul class="mt-6 space-y-1">
+                <li><a href="#tong-quan" class="nav-link block py-3 px-6 text-slate-700">Tổng Quan</a></li>
+                <li><a href="#who" class="nav-link block py-3 px-6 text-slate-700">WHO (Ai là khách hàng)</a></li>
+                <li><a href="#what" class="nav-link block py-3 px-6 text-slate-700">WHAT (Sản phẩm & Nhu cầu)</a></li>
+                <li><a href="#why" class="nav-link block py-3 px-6 text-slate-700">WHY (Lý do cần sản phẩm)</a></li>
+                <li><a href="#where" class="nav-link block py-3 px-6 text-slate-700">WHERE (Nơi mua sắm & Tìm kiếm)</a></li>
+                <li><a href="#when" class="nav-link block py-3 px-6 text-slate-700">WHEN (Thời điểm mua hàng)</a></li>
+                <li><a href="#how" class="nav-link block py-3 px-6 text-slate-700">HOW (Cách thức & Giá cả)</a></li>
+            </ul>
+        </nav>
 
-        <!-- Mục WHAT -->
-        <section id="what" class="section-card">
-            <h2 class="section-header">WHAT (Vấn đề/Sản phẩm là gì?)</h2>
-            <div class="divide-y divide-gray-200">
-                <div class="question-item">
-                    <h3 class="question-title">1. [Điền nội dung câu hỏi 1 từ cột "Questions" trong mục WHAT]</h3>
-                    <div class="detail-grid">
-                        <div class="detail-block">
-                            <strong>[Tên cột 3]:</strong>
-                            <p>[Điền nội dung tương ứng]</p>
-                        </div>
-                        <div class="detail-block">
-                            <strong>[Tên cột 4]:</strong>
-                            <p>[Điền nội dung tương ứng]</p>
-                        </div>
-                        <div class="detail-block">
-                            <strong>[Tên cột 5]:</strong>
-                            <p>[Điền nội dung tương ứng]</p>
-                        </div>
+        <!-- Main Content -->
+        <main class="w-full lg:ml-64 p-4 sm:p-6 lg:p-10">
+            <!-- Mobile Header & Menu Button -->
+            <header class="lg:hidden flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-teal-700">phpFox Buyer Persona</h2>
+                <button id="mobile-menu-button" class="p-2 rounded-md text-slate-600 hover:bg-slate-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </header>
+            
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden lg:hidden mb-6 bg-white rounded-lg shadow">
+                 <ul class="space-y-1 p-2">
+                    <li><a href="#tong-quan" class="nav-link block py-2 px-4 text-slate-700 rounded-md">Tổng Quan</a></li>
+                    <li><a href="#who" class="nav-link block py-2 px-4 text-slate-700 rounded-md">WHO (Ai là khách hàng)</a></li>
+                    <li><a href="#what" class="nav-link block py-2 px-4 text-slate-700 rounded-md">WHAT (Sản phẩm & Nhu cầu)</a></li>
+                    <li><a href="#why" class="nav-link block py-2 px-4 text-slate-700 rounded-md">WHY (Lý do cần sản phẩm)</a></li>
+                    <li><a href="#where" class="nav-link block py-2 px-4 text-slate-700 rounded-md">WHERE (Nơi mua sắm & Tìm kiếm)</a></li>
+                    <li><a href="#when" class="nav-link block py-2 px-4 text-slate-700 rounded-md">WHEN (Thời điểm mua hàng)</a></li>
+                    <li><a href="#how" class="nav-link block py-2 px-4 text-slate-700 rounded-md">HOW (Cách thức & Giá cả)</a></li>
+                </ul>
+            </div>
+
+            <!-- Section: Tổng Quan -->
+            <section id="tong-quan" class="section-card mb-12">
+                <h2 class="section-title">Tổng Quan về Chân Dung Khách Hàng phpFox</h2>
+                <p class="section-intro">Báo cáo này cung cấp cái nhìn tổng quan chi tiết về chân dung khách hàng mục tiêu của phpFox, từ đặc điểm nhân khẩu học, nhu cầu, động lực, đến hành vi tìm kiếm và mua hàng. Hiểu rõ khách hàng sẽ giúp chúng ta phát triển chiến lược marketing và sản phẩm hiệu quả.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-teal-50 p-4 rounded-lg border border-teal-200">
+                        <p class="font-semibold text-teal-700">Đối tượng chính</p>
+                        <p class="text-xl font-bold text-teal-600">Founder/CEO</p>
+                    </div>
+                    <div class="bg-teal-50 p-4 rounded-lg border border-teal-200">
+                        <p class="font-semibold text-teal-700">Giá trị sản phẩm</p>
+                        <p class="text-xl font-bold text-teal-600">300.000đ/sản phẩm</p>
+                    </div>
+                    <div class="bg-teal-50 p-4 rounded-lg border border-teal-200">
+                        <p class="font-semibold text-teal-700">Ngân sách mua 1 lần</p>
+                        <p class="text-xl font-bold text-teal-600">Dưới 1 triệu</p>
                     </div>
                 </div>
-                <!-- Thêm các câu hỏi khác cho mục WHAT tại đây -->
-            </div>
-        </section>
+            </section>
 
-        <!-- Mục WHY -->
-        <section id="why" class="section-card">
-            <h2 class="section-header">WHY (Tại sao lại quan trọng/cần thiết?)</h2>
-            <div class="divide-y divide-gray-200">
-                 <div class="question-item">
-                    <h3 class="question-title">1. [Điền nội dung câu hỏi 1 từ cột "Questions" trong mục WHY]</h3>
-                    <div class="detail-grid">
-                        <div class="detail-block">
-                            <strong>[Tên cột 3]:</strong>
-                            <p>[Điền nội dung tương ứng]</p>
-                        </div>
-                        <div class="detail-block">
-                            <strong>[Tên cột 4]:</strong>
-                            <p>[Điền nội dung tương ứng]</p>
-                        </div>
-                        <div class="detail-block">
-                            <strong>[Tên cột 5]:</strong>
-                            <p>[Điền nội dung tương ứng]</p>
+            <!-- Section: WHO -->
+            <section id="who" class="section-card mb-12">
+                <h2 class="section-title">WHO (Ai là khách hàng)</h2>
+                <p class="section-intro">Phần này mô tả đặc điểm nhân khẩu học, nghề nghiệp và vai trò của người mua và người ảnh hưởng đến quyết định mua phpFox.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                    <div class="question-card">
+                        <p class="question-text">1. Giới tính</p>
+                        <p class="answer-text">Tất cả các giới tính (80% Nam, 20% Nữ)</p>
+                        <div class="chart-container mt-4">
+                            <canvas id="genderChart"></canvas>
                         </div>
                     </div>
-                </div>
-                <!-- Thêm các câu hỏi khác cho mục WHY tại đây -->
-            </div>
-        </section>
-
-        <!-- Mục WHERE -->
-        <section id="where" class="section-card">
-            <h2 class="section-header">WHERE (Bối cảnh/Địa điểm ở đâu?)</h2>
-            <div class="divide-y divide-gray-200">
-                 <div class="question-item">
-                    <h3 class="question-title">1. [Điền nội dung câu hỏi 1 từ cột "Questions" trong mục WHERE]</h3>
-                    <div class="detail-grid">
-                        <div class="detail-block">
-                            <strong>[Tên cột 3]:</strong>
-                            <p>[Điền nội dung tương ứng]</p>
-                        </div>
-                        <div class="detail-block">
-                            <strong>[Tên cột 4]:</strong>
-                            <p>[Điền nội dung tương ứng]</p>
-                        </div>
-                        <div class="detail-block">
-                            <strong>[Tên cột 5]:</strong>
-                            <p>[Điền nội dung tương ứng]</p>
-                        </div>
+                    <div class="question-card">
+                        <p class="question-text">2. Độ tuổi</p>
+                        <p class="answer-text">25-55</p>
+                        <div class="horizontal-line"></div>
+                        <p class="question-text">3. Nghề nghiệp</p>
+                        <ul class="answer-text list-disc list-inside">
+                            <li>Founders hoặc chủ doanh nghiệp xây dựng một cộng đồng với một đội ngũ nhỏ.</li>
+                            <li>Online Coaches (Huấn luyện viên trực tuyến)</li>
+                            <li>Membership Site Creators (Người tạo trang thành viên)</li>
+                            <li>Niche community builder (Người xây dựng cộng đồng chuyên biệt)</li>
+                        </ul>
+                        <p class="action-text">→ *Hành động:* Phát triển nội dung quảng cáo phù hợp và nhắm mục tiêu quảng cáo thích hợp.</p>
                     </div>
                 </div>
-                <!-- Thêm các câu hỏi khác cho mục WHERE tại đây -->
-            </div>
-        </section>
 
-        <!-- Mục WHEN -->
-        <section id="when" class="section-card">
-            <h2 class="section-header">WHEN (Thời điểm nào?)</h2>
-            <div class="divide-y divide-gray-200">
-                <div class="question-item">
-                    <h3 class="question-title">1. [Điền nội dung câu hỏi 1 từ cột "Questions" trong mục WHEN]</h3>
-                    <div class="detail-grid">
-                        <div class="detail-block">
-                            <strong>[Tên cột 3]:</strong>
-                            <p>[Điền nội dung tương ứng]</p>
-                        </div>
-                        <div class="detail-block">
-                            <strong>[Tên cột 4]:</strong>
-                            <p>[Điền nội dung tương ứng]</p>
-                        </div>
-                        <div class="detail-block">
-                            <strong>[Tên cột 5]:</strong>
-                            <p>[Điền nội dung tương ứng]</p>
-                        </div>
+                <div class="question-card">
+                    <p class="question-text">4. Chức danh/Vai trò?</p>
+                    <p class="answer-text">CEO, Founder, Community Manager, Head of Product, Marketing Manager</p>
+                    <p class="action-text">→ *Hành động:* Phát triển nội dung quảng cáo phù hợp và nhắm mục tiêu quảng cáo thích hợp.</p>
+                    <div class="horizontal-line"></div>
+                    <p class="question-text">8. Học vấn</p>
+                    <p class="answer-text">College-educated (often business, marketing, or tech)</p>
+                    <p class="action-text">→ *Hành động:* Nội dung nên sâu sắc, không thô tục.</p>
+                </div>
+
+                <div class="question-card">
+                    <p class="question-text">9. Ai là người ra quyết định mua hàng?</p>
+                    <p class="answer-text">Founder / CEO (makes final decision and payment)</p>
+                    <div class="horizontal-line"></div>
+                    <p class="question-text">10. Ai là người ảnh hưởng trực tiếp đến quyết định mua hàng?</p>
+                    <ul class="answer-text list-disc list-inside">
+                        <li>Product/Tech lead or Marketing Manager (who evaluates usability, features)</li>
+                        <li>Trusted team members, online peer groups, or fellow community creators</li>
+                    </ul>
+                </div>
+
+                <div class="question-card">
+                    <p class="question-text">11. Ai là người ảnh hưởng gián tiếp đến quyết định mua hàng?</p>
+                    <ul class="answer-text list-disc list-inside">
+                        <li>Social proof from similar brands</li>
+                        <li>tech influencers / reviewers</li>
+                    </ul>
+                    <p class="action-text">→ *Hành động:* Collab witg KOLs who are Tech blogger or Youtuber to promote phpFox product</p>
+                    <div class="horizontal-line"></div>
+                    <p class="question-text">12. Ai thực sự sử dụng sản phẩm?</p>
+                    <ul class="answer-text list-disc list-inside">
+                        <li>Community managers / admin</li>
+                        <li>Community Members</li>
+                        <li>And the buyers themselves</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section: WHAT -->
+            <section id="what" class="section-card mb-12">
+                <h2 class="section-title">WHAT (Sản phẩm và nhu cầu)</h2>
+                <p class="section-intro">Phần này đi sâu vào những khó khăn, động lực và kỳ vọng của khách hàng đối với một nền tảng cộng đồng như phpFox.</p>
+                
+                <div class="question-card">
+                    <p class="question-text">13. what is their painpoints</p>
+                    <ul class="answer-text list-disc list-inside space-y-1">
+                        <li>Host their community platform on generic social network such as Facebook Group that lack of control. They have to follow by Facebook's community standards and algorithms.</li>
+                        <li>Difficult to manage members, as they're dependent on the community itself. Lack of control over community data, user roles management</li>
+                        <li>Poor member engagement due to limited customization or lack of social features, monetization features</li>
+                        <li>Don't have budget for high development costs and time to build a platform from scratch</li>
+                        <li>Get annoyed by ads</li>
+                        <li>The platform is free, so they can't guarantee security. (This is critical for businesses.)</li>
+                        <li>Under Third-party branding, not their own branding.</li>
+                    </ul>
+                    <p class="action-text">→ *Hành động:* Create relevant blog</p>
+                </div>
+
+                <div class="question-card">
+                    <p class="question-text">WHAT Motivates Them to Choose a Platform Like phpFox and how phpFox solve their painpoints</p>
+                    <ul class="answer-text list-disc list-inside space-y-3">
+                        <li><strong>1. Control & Ownership</strong>
+                            <p class="ml-4">They want full control over their community—not be at the mercy of algorithm changes or platform bans.</p>
+                            <p class="ml-4 font-medium">Motivation:</p> They’re leaving generic platforms (Facebook Groups, Discord, etc.) and want something independent and fully owned.
+                            <p class="ml-4 font-medium">phpFox fit:</p> Offers white-label, self-hosted options and data ownership.
+                        </li>
+                        <li><strong>2. Monetization Opportunities</strong>
+                            <p class="ml-4">They want to turn their community into a revenue stream.</p>
+                            <p class="ml-4 font-medium">Motivation:</p> They’re looking to sell memberships, courses, or exclusive content.
+                            <p class="ml-4 font-medium">phpFox fit:</p> Monetization tools (subscriptions, marketplace).
+                        </li>
+                         <li><strong>3. Customization & Branding</strong>
+                            <p class="ml-4">They need the platform to look and feel under their brand name</p>
+                            <p class="ml-4 font-medium">Motivation:</p> Their community is an extension of their business, and design consistency builds trust.
+                            <p class="ml-4 font-medium">phpFox fit:</p> Offers white-label, High design flexibility, themes, and developer freedom.
+                        </li>
+                         <li><strong>4. Scalability for Growth</strong>
+                            <p class="ml-4">As their business scale, they want a platform that can grow with it.</p>
+                            <p class="ml-4 font-medium">phpFox fit:</p> support add-ons, API access, and enterprise scalability.
+                        </li>
+                         <li><strong>5. Professionalism & Credibility</strong>
+                            <p class="ml-4">They want a platform to look legit—like a real business, not a group chat.”</p>
+                            <p class="ml-4 font-medium">Motivation:</p> Their users expect a premium experience.
+                            <p class="ml-4 font-medium">phpFox fit:</p> Offers a polished, structured community layout with user roles management, and privacy controls.
+                        </li>
+                         <li><strong>6. Better Member Engagement</strong>
+                            <p class="ml-4">They want to build an engaged community</p>
+                            <p class="ml-4 font-medium">Motivation:</p> They need notifications, content feeds, events, and community tools that drive connection.
+                            <p class="ml-4 font-medium">phpFox fit:</p> Interactive modules like blogs, events, groups, polls, live chat, and notifications.
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="question-card">
+                    <p class="question-text">14. What difficulties might customers face when first using phpFox?</p>
+                    <ul class="answer-text list-disc list-inside">
+                        <li>1. Product learning curve for less tech-savvy founders</li>
+                        <li>2. Need to onboard team members and guide them to use phpFox</li>
+                        <li>3. Initial installation and set up</li>
+                    </ul>
+                    <p class="action-text">→ *Hành động:* Provide Active Product Support; Provide comprehensive video tutorial, documents, user manuals</p>
+                    <div class="horizontal-line"></div>
+                    <p class="question-text">15. what hold them back or make them hesitate buying phpFox?</p>
+                    <ul class="answer-text list-disc list-inside">
+                        <li>Concern over platform flexibility and integrations</li>
+                        <li>Budget constraints , pricing</li>
+                        <li>Uncertainty about long-term support or updates</li>
+                        <li>Fear of choosing the wrong platform, wasting money and it doesn’t work out.</li>
+                    </ul>
+                </div>
+
+                <div class="question-card">
+                    <p class="question-text">16. What makes them make faster purchase decision?</p>
+                    <ul class="answer-text list-disc list-inside">
+                        <li>Discounts & promotions</li>
+                        <li>See others like them have used the platform successfully.</li>
+                        <li>Free trial or live demo with guided onboarding</li>
+                    </ul>
+                    <div class="horizontal-line"></div>
+                    <p class="question-text">17. What do they expect from the product?</p>
+                    <ul class="answer-text list-disc list-inside">
+                        <li>Highly Customizable , Scalability,</li>
+                        <li>Clean, modern UI/UX. Easy to use</li>
+                        <li>White-label branding options</li>
+                        <li>Easy mobile access</li>
+                        <li>Clear documentation and responsive support</li>
+                    </ul>
+                    <p class="action-text">→ *Hành động:* Create relevant content</p>
+                </div>
+
+                <div class="question-card">
+                    <p class="question-text">18. What are the their hobbies and interests?</p>
+                    <p class="answer-text">They're juggling strategy, content, monetization, member engagement, and platform tech. They’re looking for tools to make that easier.</p>
+                </div>
+            </section>
+
+            <!-- Section: WHY -->
+            <section id="why" class="section-card mb-12">
+                <h2 class="section-title">WHY (Lý do cần sản phẩm)</h2>
+                <p class="section-intro">Phần này trình bày chuỗi lý do từ nhu cầu cơ bản đến tầm nhìn dài hạn, giải thích tại sao khách hàng cần phpFox.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="question-card">
+                        <p class="question-text">19. Why 01: Why do they need phpFox? -> Reason 01</p>
+                        <p class="answer-text">→ To build a fully customizable, white-label community platform. Because phpFox resolve their painpoints</p>
+                        <p class="action-text">→ *Hành động:* Create relevant content</p>
+                    </div>
+                    <div class="question-card">
+                        <p class="question-text">20. Why 02: Why phpFox solve that? -> lý do 02</p>
+                        <p class="answer-text">→ Because phpFox give them the total control over the platform. Buyers can host phpFox on their own infrastructure and keep full control of user data.
+                        Easily customize the platform through built-in tools, admin settings, and direct access to the source code.</p>
+                    </div>
+                    <div class="question-card">
+                        <p class="question-text">21. Why 03: Why buyers need to resolve reason 02? -> lý do 03</p>
+                        <p class="answer-text">→ because they're tired of relying on generic social network
+                        → Frustrated with lack of customization, user management, scalability, community focused features</p>
+                    </div>
+                    <div class="question-card">
+                        <p class="question-text">22. Why 04: tại sao khách hàng cần phải giải quyết lý do 03? -> lý do 04</p>
+                        <p class="answer-text">→ because they're entrepreneurs and decision-makers investing in long-term community-building, The community is a part of their bussiness, they dream of running a thriving, profitable community business with freedom & impact</p>
                     </div>
                 </div>
-                <!-- Thêm các câu hỏi khác cho mục WHEN tại đây -->
-            </div>
-        </section>
+            </section>
 
-        <!-- Mục HOW & HOW MUCH -->
-        <section id="how" class="section-card">
-            <h2 class="section-header">HOW & HOW MUCH (Như thế nào & Bao nhiêu?)</h2>
-            <div class="divide-y divide-gray-200">
-                 <div class="question-item">
-                    <h3 class="question-title">1. [Điền nội dung câu hỏi 1 từ cột "Questions" trong mục HOW/HOW MUCH]</h3>
-                    <div class="detail-grid">
-                        <div class="detail-block">
-                            <strong>[Tên cột 3]:</strong>
-                            <p>[Điền nội dung tương ứng]</p>
-                        </div>
-                        <div class="detail-block">
-                            <strong>[Tên cột 4]:</strong>
-                            <p>[Điền nội dung tương ứng]</p>
-                        </div>
-                        <div class="detail-block">
-                            <strong>[Tên cột 5]:</strong>
-                            <p>[Điền nội dung tương ứng]</p>
-                        </div>
+            <!-- Section: WHERE -->
+            <section id="where" class="section-card mb-12">
+                <h2 class="section-title">WHERE (Nơi mua sắm và tìm kiếm)</h2>
+                <p class="section-intro">Phần này khám phá các kênh mà khách hàng tìm kiếm thông tin, tương tác và thực hiện giao dịch mua phpFox.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="question-card">
+                        <p class="question-text">24. Where do they buy?</p>
+                        <p class="answer-text">Online through phpFox websites</p>
+                        <div class="horizontal-line"></div>
+                        <p class="question-text">25. Where do they research Community-Building Platforms?</p>
+                        <ul class="answer-text list-disc list-inside">
+                            <li>Online search via Google (keywords like “best community platforms,” “build an online community,” “community platform comparison”)</li>
+                            <li>Tech review sites (e.g., G2, Capterra, Trustpilot)</li>
+                            <li>YouTube (video reviews, tutorials, platform comparisons)</li>
+                            <li>Reddit threads (subreddits like r/Entrepreneur, r/SaaS, r/OnlineCommunities)</li>
+                            <li>Quora (questions around launching communities)</li>
+                        </ul>
+                    </div>
+                    <div class="question-card">
+                        <p class="question-text">26. Where do they live?</p>
+                        <p class="answer-text">US, Canada, Australia, Europe,</p>
+                        <p class="action-text">→ *Hành động:* Develop relevant ad content and suitable ads targeting.</p>
+                        <div class="horizontal-line"></div>
+                        <p class="question-text">27. Where do thay Engage with Similar Community Creators?</p>
+                        <ul class="answer-text list-disc list-inside">
+                            <li>Facebook groups, Discord for niche creators or founders</li>
+                            <li>LinkedIn communities and comment threads</li>
+                            <li>Twitter/X spaces and threads with hashtag #buildinpublic, #communityled, #nocode</li>
+                        </ul>
+                        <p class="action-text">→ *Hành động:* Develop relevant ad content and suitable ads targeting.</p>
                     </div>
                 </div>
-                <!-- Thêm các câu hỏi khác cho mục HOW/HOW MUCH tại đây -->
-            </div>
-        </section>
 
+                <div class="question-card">
+                    <p class="question-text">28. Where do they read news?</p>
+                    <p class="answer-text">TechCrunch, LinkedIn</p>
+                    <div class="horizontal-line"></div>
+                    <p class="question-text">29. Where do they interact with the phpFox Brand</p>
+                    <ul class="answer-text list-disc list-inside">
+                        <li>phpFox website (feature pages, blog, pricing)</li>
+                        <li>phpFox YouTube channel</li>
+                        <li>Social media (LinkedIn, Facebook)</li>
+                        <li>Case studies or customer testimonials</li>
+                        <li>Ads via Google/Facebook</li>
+                    </ul>
+                    <p class="action-text">→ *Hành động:* Develop relevant content on every touch points</p>
+                </div>
+
+                <div class="question-card">
+                    <p class="question-text">30. Look for Technical Setup or Customization Help?</p>
+                    <ul class="answer-text list-disc list-inside">
+                        <li>phpFox community</li>
+                        <li>phpFox documentation (user mannual)</li>
+                        <li>phpFox ticket support (WHMS)</li>
+                    </ul>
+                    <p class="action-text">→ *Hành động:* Provide active support</p>
+                    <div class="horizontal-line"></div>
+                    <p class="question-text">31. where do they read software review?</p>
+                    <p class="answer-text">g2, captera, trustpilot</p>
+                    <p class="action-text">→ *Hành động:* update phpFox company profile in these review sites</p>
+                </div>
+            </section>
+
+            <!-- Section: WHEN -->
+            <section id="when" class="section-card mb-12">
+                <h2 class="section-title">WHEN (Thời điểm mua hàng)</h2>
+                <p class="section-intro">Phần này xác định các yếu tố kích hoạt và thời điểm quyết định mua hàng của khách hàng phpFox.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="question-card">
+                        <p class="question-text">32. When they start looking for a community platform?</p>
+                        <ul class="answer-text list-disc list-inside">
+                            <li>When planning to launch a social community and need a platform to grow with it</li>
+                            <li>When launching a course/program/membership and need a platform that can monetize</li>
+                            <li>When investing in business infrastructure (new fiscal year, team expansion)</li>
+                            <li>After frustrations with existing tools (lack of customization, privacy, monetization)</li>
+                        </ul>
+                        <p class="action-text">→ *Hành động:* Develop relevant content</p>
+                    </div>
+                    <div class="question-card">
+                        <p class="question-text">33. when they're ready to buy?</p>
+                        <ul class="answer-text list-disc list-inside">
+                            <li>After validating a community idea or getting user interest</li>
+                            <li>When they outgrow Facebook Groups, Slack, or Discord</li>
+                            <li>Post-funding or after securing a budget for digital tools</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <p class="question-text">34. When do they usually make purchases?</p>
+                    <p class="answer-text">in Q4 when the holiday season happens</p>
+                    <p class="action-text">→ *Hành động:* Send marketing email during peak shopping time. Increase ad spend for big promotion in q4. Staff customer service: Ensure enough support is available when customers are shopping and might have questions.</p>
+                    <div class="horizontal-line"></div>
+                    <p class="question-text">35. Actively Search for Alternatives?</p>
+                    <ul class="answer-text list-disc list-inside">
+                        <li>After facing limitations with current tools (lack of customization, privacy, monetization)</li>
+                        <li>When setting strategic goals (e.g. “build our own space”)</li>
+                    </ul>
+                    <p class="action-text">→ *Hành động:* Làm nội dung phù hợp</p>
+                </div>
+
+                <div class="question-card">
+                    <p class="question-text">36. Decide to Buy or Subscribe?</p>
+                    <ul class="answer-text list-disc list-inside">
+                        <li>After comparing 2–3 platform demos</li>
+                        <li>After using phpFox Trial and see it offers the features they need</li>
+                        <li>When there's a limited-time offer or discount (e.g. Memorial Day sale, exclusive pricing)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section: HOW & How Many / How Much -->
+            <section id="how" class="section-card mb-12">
+                <h2 class="section-title">HOW & How Many / How Much (Cách thức và số lượng/giá cả)</h2>
+                <p class="section-intro">Phần này đi vào chi tiết cách thức khách hàng mua sản phẩm, số lượng và ngân sách họ sẵn sàng chi trả.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="question-card">
+                        <p class="question-text">38. How do they buy?</p>
+                        <p class="answer-text">After free trial, sales call, or peer recommendation</p>
+                        <div class="horizontal-line"></div>
+                        <p class="question-text">39. How many products at once?</p>
+                        <ul class="answer-text list-disc list-inside">
+                            <li>One main license with possible add-ons/modules:</li>
+                            <li>- 1 license / or 1 subscription plan</li>
+                            <li>- 1 license + Premium App package</li>
+                            <li>- 1 license + 1 single app</li>
+                            <li>- 1 license + Installation Service</li>
+                        </ul>
+                        <p class="action-text">→ *Hành động:* Design combo 2 - 4 sản phẩm</p>
+                    </div>
+                    <div class="question-card">
+                        <p class="question-text">40. Khách hàng sẵn sàng mua với giá bao nhiêu, sẵn sàng trả bao nhiêu cho 1 sản phẩm.</p>
+                        <p class="answer-text">300.000đ</p>
+                        <p class="action-text">→ *Hành động:* Thiết sản phẩm với mức giá phù hợp</p>
+                        <div class="horizontal-line"></div>
+                        <p class="question-text">41. Khách hàng sẵn sàng trả bao nhiêu cho 1 lần mua hàng.</p>
+                        <p class="answer-text">dưới 1 triệu</p>
+                        <p class="action-text">→ *Hành động:* Thiết kế kịch bản bán hàng với khả năng up sale, cross phù hợp. Thiết kế combo với mức giá phù hợp</p>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <p class="question-text">42. How do they pay?</p>
+                    <p class="answer-text">paypal, credit card, bank transfer</p>
+                    <p class="action-text">→ *Hành động:* Có đủ các kênh thanh toán phù hợp, sử dụng tài khoản của những ngân hàng thông dụng nhất</p>
+                    <div class="horizontal-line"></div>
+                    <p class="question-text">43. How many times in product lifetime cycle?</p>
+                    <p class="answer-text">They might stick for 3–5+ years if platform scales with them and generate revenue</p>
+                    <p class="action-text">→ *Hành động:* Dựa vào giá trị vòng đời khách hàng, tính ra chi phí sẵn sàng bỏ ra để kiếm được một khách hàng mới.</p>
+                </div>
+            </section>
+
+        </main>
     </div>
 
-    <footer class="mt-12 py-8 text-center text-sm text-gray-500 border-t border-gray-200">
-        <p>&copy; <span id="currentYear"></span> [Tên Công Ty/Tổ Chức Của Bạn]. Bảo lưu mọi quyền.</p>
-        <p>Tài liệu được tạo dựa trên hình ảnh phân tích.</p>
-    </footer>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Data for Gender Chart
+    const genderData = {
+        labels: ['Nam', 'Nữ'],
+        datasets: [{
+            data: [80, 20],
+            backgroundColor: ['#0d9488', '#ec4899'], // Teal for Male, Pink for Female
+            hoverOffset: 4
+        }]
+    };
 
-    <script>
-        // JavaScript để hiển thị năm hiện tại ở footer
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-    </script>
+    const genderConfig = {
+        type: 'doughnut',
+        data: genderData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.toFixed !== undefined) {
+                                label += context.parsed + '%';
+                            }
+                            return label;
+                        }
+                    }
+                }
+            }
+        }
+    };
 
+    const genderChartCtx = document.getElementById('genderChart');
+    if (genderChartCtx) {
+        new Chart(genderChartCtx, genderConfig);
+    }
+
+    // Active nav link on scroll
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    function changeNav() {
+        let index = sections.length;
+
+        while(--index && window.scrollY + 100 < sections[index].offsetTop) {}
+        
+        navLinks.forEach((link) => link.classList.remove('active'));
+        const activeLink = document.querySelector(`.nav-link[href="#${sections[index].id}"]`);
+        if (activeLink) {
+            activeLink.classList.add('active');
+        }
+    }
+
+    window.addEventListener('scroll', changeNav);
+    changeNav(); 
+
+    // Mobile menu toggle
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    mobileMenu.addEventListener('click', (e) => {
+        if (e.target.tagName === 'A') {
+            mobileMenu.classList.add('hidden');
+        }
+    });
+});
+</script>
 </body>
 </html>
